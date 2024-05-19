@@ -13,7 +13,20 @@
 
 ## 1. Breve descripción de la actividad
 ### 1.1. Que aspectos cumplió o desarrolló de la actividad propuesta por el profesor (requerimientos funcionales y no funcionales)
+
+Desplegamos la aplicación CMS/LMS dockerizada (WordPress) en un clúster Kubernetes configurado con MicroK8s.
+El clúster se encuentra distribuido en al menos tres máquinas virtuales en AWS, asegurando alta disponibilidad.
+
+Implementamos un balanceador de cargas.
+La aplicación se desplegó utilizando réplicas para garantizar la alta disponibilidad y la tolerancia a fallos.
+
+Desplegamos una base de datos MySQL con volúmenes persistentes gestionados por un servidor NFS.
+Configuramos PersistentVolumes (PV) y PersistentVolumeClaims (PVC) para gestionar el almacenamiento de manera eficiente y segura.
+
+Registramos un dominio personalizado y configuramos los registros DNS para que apunten al balanceador de cargas.
+
 ### 1.2. Que aspectos NO cumplió o desarrolló de la actividad propuesta por el profesor (requerimientos funcionales y no funcionales)
+Cumplimos con todo 🎉
 
 ## 2. información general de diseño de alto nivel, arquitectura, patrones, mejores prácticas utilizadas.
 
@@ -25,12 +38,14 @@
 ### opcional - detalles de la organización del código por carpetas o descripción de algún archivo. (ESTRUCTURA DE DIRECTORIOS Y ARCHIVOS IMPORTANTE DEL PROYECTO, comando 'tree' de linux)
 ### opcionalmente - si quiere mostrar resultados o pantallazos 
 
+### ESTO PARA LO ULTIMO -----------------------------  
 ## 4. Descripción del ambiente de EJECUCIÓN (en producción) lenguaje de programación, librerias, paquetes, etc, con sus numeros de versiones.
 ## IP o nombres de dominio en nube o en la máquina servidor.
 ### descripción y como se configura los parámetros del proyecto (ej: ip, puertos, conexión a bases de datos, variables de ambiente, parámetros, etc)
 ### como se lanza el servidor.
 ### una mini guia de como un usuario utilizaría el software o la aplicación
 ### opcionalmente - si quiere mostrar resultados o pantallazos 
+### ESTO PARA LO ULTIMO -----------------------------  
 
 ## 5. Configuración del Cluster y despliegue de la aplicación
 ### Creación de las instancias
@@ -45,11 +60,25 @@ Para las instancias usadas para los nodos del cluster se utilizó el servicio de
 ### Instalación de MicroK8s
 Para la instalación de MicroK8s se siguió la guía oficial de la página de MicroK8s, la cual se encuentra en el siguiente [link](https://microk8s.io/docs/getting-started).
 
+Hay que hacer lo siguiente:
+
+##### PRIMERO: 
+instalar snap:  
+```bash
+sudo apt install snap -y && sudo apt install snapd -y
+```
+
+##### SEGUNDO: 
+instalar microk8s: 
+```bash
+sudo snap install microk8s --classic
+```
+
 ### Creación del cluster
 Para la creación del cluster debemos dirijirnos al nodo maestro y ejecutar el siguiente comando:
 
 ```bash
-$ microk8s add-node
+microk8s add-node
 From the node you wish to join to this cluster, run the following:
 microk8s join 10.128.0.7:25000/4ba95021d5567941c329d2500bc8f023/105d18a7bb28
 
@@ -69,93 +98,56 @@ $ microk8s⋅join⋅10.128.0.7:25000/4ba95021d5567941c329d2500bc8f023/105d18a7bb
 > El comando `microk8s add-node` se ejecuta cada vez que se quiera agregar un nuevo nodo al cluster.
 
 
-##### PRIMERO: 
-instalar snap:  sudo apt install snap -y && sudo apt install snapd -y
-
-##### SEGUNDO: 
-instalar microk8s: sudo snap install microk8s --classic
-
-##### TERCERO 
-crear el nodo maestro y conectarle los workes 
-
 ### Configuración del NFS 
-##### PRIMERO:
-Step 1: Installing NFS Kernel Server
-To set up the NFS server, you first need to install the NFS Kernel server package on your Ubuntu system. Open your terminal and execute the following command:
 
+##### Paso 1: Instalación del servidor NFS Kernel
+Para configurar el servidor NFS, primero se necesita instalar el paquete NFS-Kernel-Server. Es necesario ejecutar el siguiente comando:
+
+```bash
 sudo apt update
 sudo apt install nfs-kernel-server
-Step 2: Creating the Export Directory
-After installing the necessary package, the next step is to create a directory that you wish to share with your clients. For this guide, we will use /var/nfs/general (though you can choose any directory as per your requirements).
+```
 
+##### Paso 2: Crear el directorio de exportación
+Crear el directorio que se desea compartir con los clientes (en nuestro caso, el cluster). Nosotros usamos el directorio /var/nfs/general (puede ser cualquiera). 
+
+```bash
 sudo mkdir -p /var/nfs/general
 sudo chown nobody:nogroup /var/nfs/general
-Step 3: Configuring NFS Exports
-Once the directory is ready, you must edit the /etc/exports file to make it available to clients. Open the file with your preferred text editor:
+```
 
+##### Paso 3: Configuración de las exportaciones NFS
+Una vez que el directorio este listo, se debe editar el archivo /etc/exports para ponerlo a disposición del cluster. 
+
+```bash
 sudo nano /etc/exports
-Add the following line to the file, which specifies the directory to share, the client, and the sharing options:
+```
 
+Añadir la siguiente línea al archivo, la cual especifica el directorio a compartir, el cliente y las opciones de compartición:
+
+```bash
 /var/nfs/general    client_ip(rw,sync,no_subtree_check)
-Replace client_ip with the IP address of the client machine. If you want to specify multiple clients, add additional lines or use wildcards and/or subnets.
+```
 
-Step 4: Exporting the Shared Directory
-After configuring the exports, apply the changes by running the exportfs command:
+Reemplazar client_ip con la dirección IP de la máquina cliente. Para múltiples clientes, añadir cada cliente en una linea.
 
+#### Paso 4: Exportación del directorio compartido
+Después de configurar las exportaciones, aplica los cambios ejecutando el comando exportfs:
+
+```bash
 sudo exportfs -a
-Step 5: Starting and Enabling the NFS Server
-Start the NFS server and ensure that it will start automatically on boot:
+```
 
+#### Paso 5: Iniciar y habilitar el servidor NFS
+
+Iniciar el servidor NFS y preferiblemente que se inicie automáticamente al arrancar el sistema:
+
+```bash
 sudo systemctl start nfs-kernel-server
 sudo systemctl enable nfs-kernel-server
-
-##### SEGUNDO:
-Create a Persistent Volume (PV) 
-Create a Persistent Volume Claim (PVC)### configuración de las instancias 
-##### PRIMERO: 
-instalar snap:  sudo apt install snap -y && sudo apt install snapd -y
-
-##### SEGUNDO: 
-instalar microk8s: sudo snap install microk8s --classic
-
-##### TERCERO 
-crear el nodo maestro y conectarle los workes 
-
-### Configuración del NFS 
-##### PRIMERO:
-Step 1: Installing NFS Kernel Server
-To set up the NFS server, you first need to install the NFS Kernel server package on your Ubuntu system. Open your terminal and execute the following command:
-
-sudo apt update
-sudo apt install nfs-kernel-server
-Step 2: Creating the Export Directory
-After installing the necessary package, the next step is to create a directory that you wish to share with your clients. For this guide, we will use /var/nfs/general (though you can choose any directory as per your requirements).
-
-sudo mkdir -p /var/nfs/general
-sudo chown nobody:nogroup /var/nfs/general
-Step 3: Configuring NFS Exports
-Once the directory is ready, you must edit the /etc/exports file to make it available to clients. Open the file with your preferred text editor:
-
-sudo nano /etc/exports
-Add the following line to the file, which specifies the directory to share, the client, and the sharing options:
-
-/var/nfs/general    client_ip(rw,sync,no_subtree_check)
-Replace client_ip with the IP address of the client machine. If you want to specify multiple clients, add additional lines or use wildcards and/or subnets.
-
-Step 4: Exporting the Shared Directory
-After configuring the exports, apply the changes by running the exportfs command:
-
-sudo exportfs -a
-Step 5: Starting and Enabling the NFS Server
-Start the NFS server and ensure that it will start automatically on boot:
-
-sudo systemctl start nfs-kernel-server
-sudo systemctl enable nfs-kernel-server
-
-##### SEGUNDO:
-Create a Persistent Volume (PV) 
-Create a Persistent Volume Claim (PVC)
+```
 
 ## referencias:
 - [Instalación y configuración de MicroK8s](https://microk8s.io/docs/getting-started)
 - [Configuración cluster de kubernetes](https://microk8s.io/docs/clustering)
+- [Configuración del NFS](https://reintech.io/blog/setting-up-nfs-server-ubuntu-20-04)
