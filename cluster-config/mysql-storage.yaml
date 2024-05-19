@@ -1,0 +1,26 @@
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: mysql-pv
+spec:
+  capacity:
+    storage: 2Gi  # Adjust storage size as needed
+  accessModes:
+    - ReadWriteMany
+  persistentVolumeReclaimPolicy: Retain  # Keep the PV after PVC is deleted
+  storageClassName: ""  # No StorageClass for manual provisioning
+  nfs:
+    path: /var/nfs/general
+    server: 10.128.0.6  # Replace with the internal IP of your NFS server node
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: mysql-pvc
+spec:
+  storageClassName: nfs-csi
+  accessModes:
+    - ReadWriteMany
+  resources:
+    requests:
+      storage: 2Gi  # Should match the PV size
