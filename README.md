@@ -30,24 +30,9 @@ Cumplimos con todo 🎉
 
 ## 2. información general de diseño de alto nivel, arquitectura, patrones, mejores prácticas utilizadas.
 
-## 3. Descripción del ambiente de desarrollo y técnico: lenguaje de programación, librerias, paquetes, etc, con sus numeros de versiones.
-### como se compila y ejecuta.
-### detalles del desarrollo.
-### detalles técnicos
-### descripción y como se configura los parámetros del proyecto (ej: ip, puertos, conexión a bases de datos, variables de ambiente, parámetros, etc)
-### opcional - detalles de la organización del código por carpetas o descripción de algún archivo. (ESTRUCTURA DE DIRECTORIOS Y ARCHIVOS IMPORTANTE DEL PROYECTO, comando 'tree' de linux)
-### opcionalmente - si quiere mostrar resultados o pantallazos 
+![p2](https://github.com/Pokloskaya/proyecto2-TopicosDeTelematica/assets/83888452/afa87cb1-2e6c-4516-80ac-e364dec06aeb)
 
-### ESTO PARA LO ULTIMO -----------------------------  
-## 4. Descripción del ambiente de EJECUCIÓN (en producción) lenguaje de programación, librerias, paquetes, etc, con sus numeros de versiones.
-## IP o nombres de dominio en nube o en la máquina servidor.
-### descripción y como se configura los parámetros del proyecto (ej: ip, puertos, conexión a bases de datos, variables de ambiente, parámetros, etc)
-### como se lanza el servidor.
-### una mini guia de como un usuario utilizaría el software o la aplicación
-### opcionalmente - si quiere mostrar resultados o pantallazos 
-### ESTO PARA LO ULTIMO -----------------------------  
-
-## 5. Configuración del Cluster y despliegue de la aplicación
+## 3. Ambiente de desarrollo y ejecución (Configuración del Cluster y despliegue de la aplicación)
 ### Creación de las instancias
 Para las instancias usadas para los nodos del cluster se utilizó el servicio de GCP, y se crearon 3 instancias con las siguientes características:
 
