@@ -1,0 +1,13 @@
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  name: wordpress-cert
+  namespace: default
+spec:
+  secretName: wordpress-tls
+  issuerRef:
+    name: wp-prod-issuer
+    kind: ClusterIssuer
+  commonName: proyecto2.adrephos.me
+  dnsNames:
+  - proyecto2.adrephos.me
