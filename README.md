@@ -151,3 +151,6 @@ sudo systemctl enable nfs-kernel-server
 - [Instalación y configuración de MicroK8s](https://microk8s.io/docs/getting-started)
 - [Configuración cluster de kubernetes](https://microk8s.io/docs/clustering)
 - [Configuración del NFS](https://reintech.io/blog/setting-up-nfs-server-ubuntu-20-04)
+- [Configuración de WordPres en Kubernetes](https://sesamedisk.com/deploy-wordpress-on-k8s/)
+- [Configuración de certificados SSL](https://stackoverflow.com/questions/67430592/how-to-setup-letsencrypt-with-kubernetes-microk8s-using-default-ingress)
+- [Cofigurar un Ingress en Kubernetes](https://kubernetes.io/docs/concepts/services-networking/ingress/)
