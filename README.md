@@ -30,7 +30,7 @@ Cumplimos con todo 🎉
 
 ## 2. información general de diseño de alto nivel, arquitectura, patrones, mejores prácticas utilizadas.
 
-![p2](https://github.com/Pokloskaya/proyecto2-TopicosDeTelematica/assets/83888452/afa87cb1-2e6c-4516-80ac-e364dec06aeb)
+![Arquitectura](./images/architecture.png)
 
 ## 3. Ambiente de desarrollo y ejecución (Configuración del Cluster y despliegue de la aplicación)
 ### Creación de las instancias
