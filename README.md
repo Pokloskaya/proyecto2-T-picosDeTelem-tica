@@ -15,7 +15,7 @@
 ### 1.1. Que aspectos cumplió o desarrolló de la actividad propuesta por el profesor (requerimientos funcionales y no funcionales)
 
 Desplegamos la aplicación CMS/LMS dockerizada (WordPress) en un clúster Kubernetes configurado con MicroK8s.
-El clúster se encuentra distribuido en al menos tres máquinas virtuales en AWS, asegurando alta disponibilidad.
+El clúster se encuentra distribuido en GCP y asegura alta disponibilidad.
 
 Implementamos un balanceador de cargas.
 La aplicación se desplegó utilizando réplicas para garantizar la alta disponibilidad y la tolerancia a fallos.
