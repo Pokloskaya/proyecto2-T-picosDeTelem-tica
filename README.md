@@ -105,7 +105,7 @@ sudo chown nobody:nogroup /var/nfs/general
 Una vez que el directorio este listo, se debe editar el archivo /etc/exports para ponerlo a disposición del cluster. 
 
 ```bash
-sudo nano /etc/exports
+sudo vi /etc/exports
 ```
 
 Añadir la siguiente línea al archivo, la cual especifica el directorio a compartir, el cliente y las opciones de compartición:
@@ -131,6 +131,13 @@ Iniciar el servidor NFS y preferiblemente que se inicie automáticamente al arra
 sudo systemctl start nfs-kernel-server
 sudo systemctl enable nfs-kernel-server
 ```
+
+#### Resultados
+> WordPres desplegado
+> ![home](./images/home.png)
+
+> Resultado de la configuración del Cluster
+> ![master](./images/master.png)
 
 ## referencias:
 - [Instalación y configuración de MicroK8s](https://microk8s.io/docs/getting-started)
